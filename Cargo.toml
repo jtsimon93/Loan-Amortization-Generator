@@ -8,4 +8,3 @@ opt-level = 3
 
 [dependencies]
 rust_decimal = { version = "1.29.1", features = ["maths"] }
-rust_decimal_macros = "1.29.1"

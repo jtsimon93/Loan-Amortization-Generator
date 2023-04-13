@@ -1,5 +1,4 @@
 use rust_decimal::{Decimal, MathematicalOps};
-use rust_decimal_macros::dec;
 
 struct Loan {
     loan_amount: Decimal,
