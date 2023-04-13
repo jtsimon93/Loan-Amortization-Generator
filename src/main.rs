@@ -1,21 +1,26 @@
+use rust_decimal::{Decimal, MathematicalOps};
+use rust_decimal_macros::dec;
+
 struct Loan {
-    loan_amount: f32,
-    annual_percentage_rate: f32,
+    loan_amount: Decimal,
+    annual_percentage_rate: Decimal,
     loan_term: i32,
 }
 
 struct Payment {
     payment_number: i32,
-    payment_amount: f32,
-    amount_towards_interest: f32,
-    amount_towards_principal: f32,
-    remaining_balance: f32,
+    payment_amount: Decimal,
+    amount_towards_interest: Decimal,
+    amount_towards_principal: Decimal,
+    remaining_balance: Decimal,
 }
 
+
 fn main() {
+
     let test_loan = Loan {
-        loan_amount: 1000.00,
-        annual_percentage_rate: 20.00,
+        loan_amount: Decimal::from(1000),
+        annual_percentage_rate: Decimal::from(20),
         loan_term: 24,
     };
 
@@ -30,12 +35,12 @@ fn main() {
 }
 
 fn calculate_monthly_payment(loan: &Loan) -> Payment {
-    let monthly_interest_rate: f32 = (loan.annual_percentage_rate / 100.0) / 12.0;
-    let denominator: f32 = 1.0 - (1.0 + monthly_interest_rate).powi(-loan.loan_term);
-    let monthly_payment: f32 = (monthly_interest_rate * loan.loan_amount) / denominator;
-    let amount_towards_interest: f32 = monthly_interest_rate * loan.loan_amount;
-    let amount_towards_principal: f32 = monthly_payment - amount_towards_interest;
-    let remaining_balance: f32 = loan.loan_amount - amount_towards_principal;
+    let monthly_interest_rate: Decimal = (loan.annual_percentage_rate / Decimal::from(100)) / Decimal::from(12);
+    let denominator: Decimal = Decimal::from(1) - (Decimal::from(1) + monthly_interest_rate).powi((-loan.loan_term).into());
+    let monthly_payment: Decimal = (monthly_interest_rate * loan.loan_amount) / denominator;
+    let amount_towards_interest: Decimal = monthly_interest_rate * loan.loan_amount;
+    let amount_towards_principal: Decimal = monthly_payment - amount_towards_interest;
+    let remaining_balance: Decimal = loan.loan_amount - amount_towards_principal;
     let payment_number: i32 = 1;
 
     return Payment {
@@ -53,9 +58,9 @@ fn generate_amortization_schedule(loan: Loan) -> Vec<Payment> {
 
     // Get the starting data
     let initial_data = calculate_monthly_payment(&loan);
-    let monthly_interest_rate = loan.annual_percentage_rate / (12.00 * 100.00);
+    let monthly_interest_rate = loan.annual_percentage_rate / Decimal::from(1200);
     let monthly_payment = initial_data.payment_amount;
-    let mut remaining_balance: f32 = initial_data.remaining_balance;
+    let mut remaining_balance: Decimal = initial_data.remaining_balance;
 
     // Add our initial payment to the vector
     payments.push(initial_data);
