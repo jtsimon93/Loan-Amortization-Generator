@@ -1,5 +1,6 @@
 # Project
 /target
+output.csv
 
 # Jet Brains
 .idea/**/workspace.xml
