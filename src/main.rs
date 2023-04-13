@@ -67,8 +67,7 @@ fn generate_amortization_schedule(loan: Loan) -> Vec<Payment> {
     for payment_number in 2..=loan.loan_term {
         let amount_towards_interest = remaining_balance * monthly_interest_rate;
         let amount_towards_principal = monthly_payment - amount_towards_interest;
-
-
+        
         remaining_balance -= amount_towards_principal;
 
         let payment = Payment {
