@@ -1,6 +1,7 @@
 use rust_decimal::{Decimal, MathematicalOps};
 use serde::Serialize;
 use std::fs::File;
+use std::io;
 use rust_decimal::prelude::FromPrimitive;
 use csv::{WriterBuilder};
 
@@ -20,13 +21,58 @@ struct Payment {
 }
 
 fn main() {
-    let test_loan = Loan {
-        loan_amount: Decimal::from(45000),
-        annual_percentage_rate: Decimal::from_f32(6.00).unwrap(),
-        loan_term: 60,
+
+    let loan = prompt_user_for_loan_info();
+
+}
+
+fn prompt_user_for_loan_info() -> Loan {
+    let loan_amount = get_float_input("Please enter the loan amount:");
+    let annual_percentage_rate = get_float_input("Please enter the annual percentage rate:");
+    let loan_term = get_integer_input("Please enter the loan term (in months):");
+
+    let loan = Loan {
+        loan_amount: Decimal::from_f32(loan_amount).unwrap(),
+        annual_percentage_rate: Decimal::from_f32(annual_percentage_rate).unwrap(),
+        loan_term
     };
 
+    return loan;
 
+}
+
+fn get_float_input(prompt: &str) -> f32 {
+    loop {
+        println!("{}", prompt);
+
+        let mut input = String::new();
+
+        io::stdin()
+            .read_line(&mut input)
+            .expect("Failed to read input.");
+
+        match input.trim().parse::<f32>() {
+            Ok(num) => return num,
+            Err(_) => println!("Invalid input. Please try again."),
+        }
+    }
+}
+
+fn get_integer_input(prompt: &str) -> i32 {
+    loop {
+        println!("{}", prompt);
+
+        let mut input = String::new();
+
+        io::stdin()
+            .read_line(&mut input)
+            .expect("Failed to read input.");
+
+        match input.trim().parse::<i32>() {
+            Ok(num) => return num,
+            Err(_) => println!("Invalid input. Please try again."),
+        }
+    }
 }
 
 fn calculate_monthly_payment(loan: &Loan) -> Payment {
