@@ -87,9 +87,9 @@ fn calculate_monthly_payment(loan: &Loan) -> Payment {
     return Payment {
         payment_number,
         payment_amount: monthly_payment,
-        amount_towards_interest: amount_towards_interest,
-        amount_towards_principal: amount_towards_principal,
-        remaining_balance: remaining_balance,
+        amount_towards_interest,
+        amount_towards_principal,
+        remaining_balance,
     };
 }
 
@@ -113,11 +113,11 @@ fn generate_amortization_schedule(loan: Loan) -> Vec<Payment> {
         remaining_balance -= amount_towards_principal;
 
         let payment = Payment {
-            payment_number: payment_number,
+            payment_number,
             payment_amount: monthly_payment,
-            amount_towards_interest: amount_towards_interest,
-            amount_towards_principal: amount_towards_principal,
-            remaining_balance: remaining_balance,
+            amount_towards_interest,
+            amount_towards_principal,
+            remaining_balance,
         };
 
         payments.push(payment);
