@@ -45,9 +45,9 @@ fn main() {
         }
     } else if args.len() == 4 {
         // Process arguments
-        let loan_amount_input = process_float_argument(&*args[1], "loan amount");
-        let annual_percentage_rate_input = process_float_argument(&*args[2], "annual percentage rate");
-        let loan_term_input = process_integer_argument(&*args[3], "loan term");
+        let loan_amount_input = process_float_argument(&args[1], "loan amount");
+        let annual_percentage_rate_input = process_float_argument(&args[2], "annual percentage rate");
+        let loan_term_input = process_integer_argument(&args[3], "loan term");
 
         let loan = Loan {
             loan_amount: Decimal::from_f32(loan_amount_input).unwrap(),
@@ -226,6 +226,8 @@ fn output_to_terminal(loan: Loan) {
 }
 
 fn output_menu(loan: Loan) {
+    println!();
+    println!("----- OPERATIONS MENU -----");
     println!("1. Print amortization schedule to the screen.");
     println!("2. Export amortization schedule to CSV file.");
     println!("3. Help");
