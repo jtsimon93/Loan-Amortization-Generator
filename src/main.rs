@@ -26,16 +26,7 @@ fn main() {
         loan_term: 60,
     };
 
-    println!("Calculating the amortization schedule on a ${:2} loan at {}% APR for a term of {} months.", &test_loan.loan_amount, &test_loan.annual_percentage_rate, &test_loan.loan_term);
 
-    let loan_payments = generate_amortization_schedule(test_loan);
-
-    for payment in &loan_payments {
-        println!("Payment # {}: Payment Amount: ${:.2}, Interest Amount: ${:.2}, Principal Amount: ${:.2}, Remaining Balance: ${:.2}", payment.payment_number, payment.payment_amount, payment.amount_towards_interest, payment.amount_towards_principal, payment.remaining_balance);
-    }
-
-    println!("Writing to CSV file.");
-    output_csv(loan_payments);
 }
 
 fn calculate_monthly_payment(loan: &Loan) -> Payment {
@@ -89,7 +80,10 @@ fn generate_amortization_schedule(loan: Loan) -> Vec<Payment> {
     return payments;
 }
 
-fn output_csv(payments: Vec<Payment>) {
+fn output_csv(loan: Loan) {
+
+    let payments = generate_amortization_schedule(loan);
+
     let file = File::create("output.csv").unwrap();
     let mut writer = WriterBuilder::new()
         .has_headers(true)
@@ -118,4 +112,16 @@ fn output_csv(payments: Vec<Payment>) {
             remaining_balance_str,
         )).expect("An error occurred when writing the data.");
     }
+}
+
+fn output_to_terminal(loan: Loan) {
+
+    println!("Calculating the amortization schedule on a ${:2} loan at {}% APR for a term of {} months.", &loan.loan_amount, &loan.annual_percentage_rate, &loan.loan_term);
+
+    let loan_payments = generate_amortization_schedule(loan);
+
+    for payment in &loan_payments {
+        println!("Payment # {}: Payment Amount: ${:.2}, Interest Amount: ${:.2}, Principal Amount: ${:.2}, Remaining Balance: ${:.2}", payment.payment_number, payment.payment_amount, payment.amount_towards_interest, payment.amount_towards_principal, payment.remaining_balance);
+    }
+
 }
