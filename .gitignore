@@ -18,3 +18,5 @@ output.csv
 .idea/**/dbnavigator.xml
 .idea/sonarlint/
 
+# macOS
+.DS_Store
