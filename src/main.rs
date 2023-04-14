@@ -5,7 +5,7 @@ use std::{
 };
 use rust_decimal::{
     Decimal, MathematicalOps,
-    prelude::FromPrimitive
+    prelude::FromPrimitive,
 };
 use serde::Serialize;
 use csv::{WriterBuilder};
@@ -35,19 +35,15 @@ fn main() {
         let loan = prompt_user_for_loan_info();
 
         output_menu(loan);
-
-    }
-    else if args.len() == 2 {
+    } else if args.len() == 2 {
         // Only 1 argument supplied, see if user is requesting help
         if args[1] == "help" {
             output_help_info();
-        }
-        else {
+        } else {
             println!("Invalid arguments.");
             exit(1);
         }
-    }
-    else if args.len() == 4 {
+    } else if args.len() == 4 {
         // Process arguments
         let loan_amount_input = process_float_argument(&*args[1], "loan amount");
         let annual_percentage_rate_input = process_float_argument(&*args[2], "annual percentage rate");
@@ -56,16 +52,13 @@ fn main() {
         let loan = Loan {
             loan_amount: Decimal::from_f32(loan_amount_input).unwrap(),
             annual_percentage_rate: Decimal::from_f32(annual_percentage_rate_input).unwrap(),
-            loan_term: loan_term_input
+            loan_term: loan_term_input,
         };
 
         output_menu(loan);
-    }
-    else {
+    } else {
         println!("Invalid arguments.");
     }
-
-
 }
 
 fn prompt_user_for_loan_info() -> Loan {
@@ -76,11 +69,10 @@ fn prompt_user_for_loan_info() -> Loan {
     let loan = Loan {
         loan_amount: Decimal::from_f32(loan_amount).unwrap(),
         annual_percentage_rate: Decimal::from_f32(annual_percentage_rate).unwrap(),
-        loan_term
+        loan_term,
     };
 
     return loan;
-
 }
 
 fn get_float_input(prompt: &str) -> f32 {
@@ -135,8 +127,8 @@ fn calculate_monthly_payment(loan: &Loan) -> Payment {
     };
 }
 
-fn process_float_argument(argument: &str, argument_name: &str) -> f32{
-    let prompt_format = format!("The supplied {argument_name} was invalid. Please enter a valid {argument_name}", argument_name=argument_name);
+fn process_float_argument(argument: &str, argument_name: &str) -> f32 {
+    let prompt_format = format!("The supplied {argument_name} was invalid. Please enter a valid {argument_name}", argument_name = argument_name);
     let prompt = prompt_format.as_str();
     loop {
         match argument.trim().parse::<f32>() {
@@ -146,8 +138,8 @@ fn process_float_argument(argument: &str, argument_name: &str) -> f32{
     }
 }
 
-fn process_integer_argument(argument: &str, argument_name: &str) -> i32{
-    let prompt_format = format!("The supplied {argument_name} was invalid. Please enter a valid {argument_name}", argument_name=argument_name);
+fn process_integer_argument(argument: &str, argument_name: &str) -> i32 {
+    let prompt_format = format!("The supplied {argument_name} was invalid. Please enter a valid {argument_name}", argument_name = argument_name);
     let prompt = prompt_format.as_str();
     loop {
         match argument.trim().parse::<i32>() {
@@ -191,7 +183,6 @@ fn generate_amortization_schedule(loan: Loan) -> Vec<Payment> {
 }
 
 fn output_csv(loan: Loan) {
-
     let payments = generate_amortization_schedule(loan);
 
     let file = File::create("output.csv").unwrap();
@@ -225,7 +216,6 @@ fn output_csv(loan: Loan) {
 }
 
 fn output_to_terminal(loan: Loan) {
-
     println!("Calculating the amortization schedule on a ${:2} loan at {}% APR for a term of {} months.", &loan.loan_amount, &loan.annual_percentage_rate, &loan.loan_term);
 
     let loan_payments = generate_amortization_schedule(loan);
@@ -233,7 +223,6 @@ fn output_to_terminal(loan: Loan) {
     for payment in &loan_payments {
         println!("Payment # {:<3}: Payment Amount: ${:>8.2}, Interest Amount: ${:>9.2}, Principal Amount: ${:>9.2}, Remaining Balance: ${:>9.2}", payment.payment_number, payment.payment_amount, payment.amount_towards_interest, payment.amount_towards_principal, payment.remaining_balance);
     }
-
 }
 
 fn output_menu(loan: Loan) {
@@ -246,17 +235,13 @@ fn output_menu(loan: Loan) {
 
     if option == 1 {
         output_to_terminal(loan);
-    }
-    else if option == 2 {
+    } else if option == 2 {
         output_csv(loan);
-    }
-    else if option == 3 {
+    } else if option == 3 {
         output_help_info();
-    }
-    else if option == 4 {
+    } else if option == 4 {
         exit(0);
-    }
-    else {
+    } else {
         println!("An invalid option was selected.");
     }
 }
